@@ -16,7 +16,7 @@ docker run -d -p 5601:5601 -p 9200:9200 -p 5140:5140 -p 5140:5140/udp -v /elk:/v
 ```
 
 On the BIG-IP, 
-- Create a pool named elkpool, pointing to the machine running ELK above, destination port is 5140
+- Create a pool named elklog, pointing to the machine running ELK above, destination port is 5140
 - Create an iRule and apply it to the virtual server you want to collect log. The content of the irule is below
 ```
 when HTTP_REQUEST {
