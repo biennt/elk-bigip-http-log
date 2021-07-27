@@ -92,4 +92,6 @@ filter {
   }
 }
 ```
-The most important part is the line start with ```match => { "message" =>```
+The most important part is the line start with ```match => { "message" =>```. You may want to use a Grok debugger like this one to develop your own: https://grokdebug.herokuapp.com/
+
+Have fun!
