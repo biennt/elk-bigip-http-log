@@ -92,3 +92,4 @@ filter {
   }
 }
 ```
+The most important part is the line start with ```match => { "message" =>```
