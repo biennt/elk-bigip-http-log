@@ -55,3 +55,40 @@ when HTTP_RESPONSE {
 Accessing Kibana interface
 - Create Index patterns (find the one start with bigiphttplog-*)
 - Go to "Discover" to see the raw/parsed log
+
+## Customization
+If you modify the irule, collect more information/field, you may need to modify the logstash config.
+Below is the config file (10-syslog.conf) is bundled into the ELK image
+```
+input {
+  tcp {
+    type => "syslog"
+    port => 5140
+  }
+  udp {
+    type => "syslog"
+    port => 5140
+  }
+}
+
+filter {
+  grok {
+    match => { "message" => "<190>#%{NUMBER:timestamp}#%{DATA:virtual_name}#%{IP:client_ip}#%{POSINT:client_port}#%{IP:virtual_ip}#%{POSINT:virtual_port}#%{DATA:domain}#%{DATA:method}#%{DATA:uri}#%{DATA:agent}#%{IP:member_ip}#%{DATA:member_port}#%{POSINT:status}#%{DATA:responsetime}#%{DATA:contentlength}#"}
+  }
+  mutate {
+    convert => { "contentlength" => "integer" }
+  }
+  mutate {
+    convert => { "responsetime" => "integer" }
+  }
+    date {
+        match => [ "timestamp" , "UNIX_MS"]
+        target => "@timestamp"
+    }
+
+  geoip {
+    source => "client_ip"
+    database => "/etc/logstash/GeoLite2-City.mmdb"
+  }
+}
+```
